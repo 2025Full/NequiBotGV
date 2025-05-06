@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <title>NequiBotGV - Generador</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       padding: 0;
       background: #000;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Inter', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -45,7 +45,7 @@
       font-size: 16px;
       background: #222;
       color: #fff;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Inter', sans-serif;
     }
     .boton {
       margin-top: 10px;
@@ -54,11 +54,9 @@
       font-size: 16px;
       border: none;
       border-radius: 12px;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-weight: 700;
       cursor: pointer;
-      position: relative;
-      overflow: hidden;
       transition: all 0.4s ease;
       color: #fff;
     }
@@ -76,7 +74,6 @@
       background: #fff;
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       display: none;
     }
 
@@ -90,10 +87,10 @@
       background: transparent;
       border: none;
       font-size: 14px;
-      color: #333;
-      font-weight: 400;
+      color: #2E1A47;
+      font-weight: 500;
       text-align: right;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Inter', sans-serif;
       outline: none;
     }
 
@@ -107,17 +104,15 @@
       width: 160px;
       font-size: 14px;
       line-height: 1.3;
-      color: #333;
-      text-align: right;
     }
     #referencia {
       top: 505.82px;
       left: 172.22px;
       width: 160px;
+      font-size: 14px;
     }
   </style>
 </head>
-
 <body>
 
 <div class="formulario" id="pantalla">
@@ -130,14 +125,11 @@
     <input type="text" id="input-nombre" class="input-campo" placeholder="Nombre del destinatario">
     <input type="text" id="input-valor" class="input-campo" placeholder="Valor en $">
     <input type="text" id="input-nequi" class="input-campo" placeholder="Número Nequi">
-
     <select id="formato" class="input-campo">
       <option value="png">Formato: PNG</option>
       <option value="jpg">Formato: JPG</option>
     </select>
-
     <button id="generar" class="boton boton-descargar">Generar Comprobante</button>
-
     <div id="admin-panel" style="display: none;">
       <input type="text" id="nueva-clave" class="input-campo" placeholder="Nueva clave de acceso">
       <button id="guardar-nueva-clave" class="boton">Guardar Nueva Clave</button>
@@ -147,15 +139,14 @@
 
 <div class="container" id="captura">
   <img src="comprobante_base.png" alt="Fondo">
-  <input type="text" id="nombre"    class="input-overlay" readonly>
-  <input type="text" id="valor"     class="input-overlay" readonly>
-  <input type="text" id="nequi"     class="input-overlay" readonly>
-  <div id="fecha"></div>
+  <input type="text" id="nombre" class="input-overlay" readonly>
+  <input type="text" id="valor" class="input-overlay" readonly>
+  <input type="text" id="nequi" class="input-overlay" readonly>
+  <div id="fecha" class="input-overlay"></div>
   <input type="text" id="referencia" class="input-overlay" readonly>
 </div>
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
 <script>
 let claveAcceso = "142025";
 const claveAdmin = "1395";
@@ -227,7 +218,7 @@ function generarFecha() {
   let h = fecha.getHours(), m = fecha.getMinutes().toString().padStart(2, '0'),
       ampm = h >= 12 ? 'p. m.' : 'a. m.';
   h = h % 12 || 12;
-  document.getElementById('fecha').innerHTML = `${f}<br>a las ${h}:${m} ${ampm}`;
+  document.getElementById('fecha').innerHTML = `${f}<br>las ${h}:${m} ${ampm}`;
 }
 
 function generarReferencia() {
@@ -249,6 +240,5 @@ function descargarComprobante(formato) {
   });
 }
 </script>
-
 </body>
 </html>
