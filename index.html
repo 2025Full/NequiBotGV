@@ -206,8 +206,16 @@ document.getElementById('generar').addEventListener('click', () => {
 
   const formato = document.getElementById('formato').value;
 
+  // Esperar al menos 500ms para asegurar que se muestre el contenido antes de capturar
   setTimeout(() => {
-    descargarComprobante(formato);
+    html2canvas(document.getElementById('captura')).then(canvas => {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL(`image/${formato}`);
+      link.download = `comprobante.${formato}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
   }, 500);
 });
 
@@ -229,15 +237,6 @@ function formatValor(valor) {
   valor = valor.replace(/\D/g, '');
   if (!valor) return "$ 0,00";
   return `$ ${valor.replace(/\B(?=(\d{3})+(?!\d))/g, '.')},00`;
-}
-
-function descargarComprobante(formato) {
-  html2canvas(document.getElementById('captura')).then(canvas => {
-    const link = document.createElement('a');
-    link.href = canvas.toDataURL(`image/${formato}`);
-    link.download = `comprobante.${formato}`;
-    link.click();
-  });
 }
 </script>
 </body>
