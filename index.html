@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -76,7 +75,7 @@
       max-width: 390px;
       margin: 20px auto;
       background: #fff;
-      border-radius: 20px;
+      border-radius: 0px;
       overflow: hidden;
       display: none;
       transform-origin: top left;
@@ -98,8 +97,6 @@
       text-align: right;
       font-family: 'Inter', sans-serif;
       outline: none;
-      -webkit-user-select: none;
-      user-select: none;
       pointer-events: none;
     }
 
@@ -109,6 +106,30 @@
     #nequi     { top: 434.02px; left: 172.22px; width: 160px; }
     #fecha     { top: 460.02px; left: 172.22px; width: 160px; line-height: 1.3; }
     #referencia{ top: 505.82px; left: 172.22px; width: 160px; font-size: 14px; }
+
+    #verPantallaCompleta {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 20px;
+      font-size: 16px;
+      background: #1e88e5;
+      color: #fff;
+      border: none;
+      border-radius: 0px;
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+      z-index: 9999;
+    }
+
+    @media (max-width: 420px) {
+      .container {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -143,6 +164,8 @@
   <div id="fecha" class="input-overlay"></div>
   <input type="text" id="referencia" class="input-overlay" readonly>
 </div>
+
+<button id="verPantallaCompleta">Ver en Pantalla Completa</button>
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script>
@@ -204,9 +227,23 @@ document.getElementById('generar').addEventListener('click', () => {
 
   const formato = document.getElementById('formato').value;
 
+  // Mostrar botón de pantalla completa
+  document.getElementById('verPantallaCompleta').style.display = 'block';
+
   setTimeout(() => {
     descargarComprobante(formato);
   }, 500);
+});
+
+document.getElementById('verPantallaCompleta').addEventListener('click', () => {
+  const contenedor = document.getElementById('captura');
+  if (contenedor.requestFullscreen) {
+    contenedor.requestFullscreen();
+  } else if (contenedor.webkitRequestFullscreen) {
+    contenedor.webkitRequestFullscreen();
+  } else if (contenedor.msRequestFullscreen) {
+    contenedor.msRequestFullscreen();
+  }
 });
 
 function generarFecha() {
