@@ -6,7 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
       padding: 0;
@@ -17,6 +19,7 @@
       align-items: center;
       min-height: 100vh;
       flex-direction: column;
+      zoom: 1;
     }
     .formulario {
       background: #111;
@@ -56,8 +59,8 @@
       border-radius: 12px;
       font-weight: 700;
       cursor: pointer;
+      transition: all 0.4s ease;
       color: #fff;
-      transition: 0.4s;
     }
     .boton:hover { opacity: 0.9; }
     .boton-whatsapp { background: linear-gradient(90deg, #00c853, #00e676); }
@@ -67,15 +70,22 @@
 
     .container {
       position: relative;
-      width: 100%;
-      max-width: 390px;
+      width: 390px;
+      height: auto;
       margin: 20px auto;
+      background: #fff;
+      overflow: hidden;
       display: none;
+      transform-origin: top left;
+      transform: scale(1);
+      zoom: 1;
     }
+
     .container img {
       width: 100%;
       display: block;
     }
+
     .input-overlay {
       position: absolute;
       background: transparent;
@@ -84,11 +94,11 @@
       color: #2E1A47;
       font-weight: 500;
       text-align: right;
-      pointer-events: none;
       font-family: 'Inter', sans-serif;
+      outline: none;
+      pointer-events: none;
     }
 
-    /* Coordenadas de campos */
     #nombre    { top: 388.02px; left: 172.22px; width: 160px; }
     #valor     { top: 411.02px; left: 172.22px; width: 160px; }
     #nequi     { top: 434.02px; left: 172.22px; width: 160px; }
@@ -106,7 +116,16 @@
       background: #1e88e5;
       color: #fff;
       border: none;
+      border-radius: 0px;
+      font-weight: bold;
       z-index: 9999;
+    }
+
+    @media (max-width: 420px) {
+      .container {
+        width: 100%;
+        max-width: 100%;
+      }
     }
   </style>
 </head>
@@ -204,6 +223,7 @@ document.getElementById('generar').addEventListener('click', () => {
   generarReferencia();
 
   const formato = document.getElementById('formato').value;
+
   document.getElementById('verPantallaCompleta').style.display = 'block';
 
   setTimeout(() => {
@@ -215,6 +235,10 @@ document.getElementById('verPantallaCompleta').addEventListener('click', () => {
   const contenedor = document.getElementById('captura');
   if (contenedor.requestFullscreen) {
     contenedor.requestFullscreen();
+  } else if (contenedor.webkitRequestFullscreen) {
+    contenedor.webkitRequestFullscreen();
+  } else if (contenedor.msRequestFullscreen) {
+    contenedor.msRequestFullscreen();
   }
 });
 
