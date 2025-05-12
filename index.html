@@ -6,9 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       padding: 0;
@@ -48,7 +46,6 @@
       font-size: 16px;
       background: #222;
       color: #fff;
-      font-family: 'Inter', sans-serif;
     }
     .boton {
       margin-top: 10px;
@@ -57,7 +54,6 @@
       font-size: 16px;
       border: none;
       border-radius: 12px;
-      font-family: 'Inter', sans-serif;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.4s ease;
@@ -68,6 +64,7 @@
     .boton-clave { background: linear-gradient(90deg, #cc0000, #ff1744); }
     .boton-cambiar { background: linear-gradient(90deg, #6a1b9a, #8e24aa); }
     .boton-descargar { background: linear-gradient(90deg, #1976d2, #2196f3); }
+    .boton-compartir { background: linear-gradient(90deg, #25D366, #128C7E); }
 
     .container {
       position: relative;
@@ -75,8 +72,6 @@
       max-width: 390px;
       margin: 20px auto;
       background: #fff;
-      border-radius: 0px;
-      overflow: hidden;
       display: none;
       transform-origin: top left;
       transform: scale(1);
@@ -96,11 +91,9 @@
       font-weight: 500;
       text-align: right;
       font-family: 'Inter', sans-serif;
-      outline: none;
       pointer-events: none;
     }
 
-    /* Posiciones fijas sobre imagen de 390px de ancho */
     #nombre    { top: 388.02px; left: 172.22px; width: 160px; }
     #valor     { top: 411.02px; left: 172.22px; width: 160px; }
     #nequi     { top: 434.02px; left: 172.22px; width: 160px; }
@@ -118,10 +111,13 @@
       background: #1e88e5;
       color: #fff;
       border: none;
-      border-radius: 0px;
-      font-family: 'Inter', sans-serif;
       font-weight: bold;
       z-index: 9999;
+    }
+
+    #compartirWhatsapp {
+      display: none;
+      margin-top: 10px;
     }
 
     @media (max-width: 420px) {
@@ -149,6 +145,7 @@
       <option value="jpg">Formato: JPG</option>
     </select>
     <button id="generar" class="boton boton-descargar">Generar Comprobante</button>
+    <button id="compartirWhatsapp" class="boton boton-compartir">Compartir por WhatsApp</button>
     <div id="admin-panel" style="display: none;">
       <input type="text" id="nueva-clave" class="input-campo" placeholder="Nueva clave de acceso">
       <button id="guardar-nueva-clave" class="boton">Guardar Nueva Clave</button>
@@ -226,9 +223,8 @@ document.getElementById('generar').addEventListener('click', () => {
   generarReferencia();
 
   const formato = document.getElementById('formato').value;
-
-  // Mostrar botón de pantalla completa
   document.getElementById('verPantallaCompleta').style.display = 'block';
+  document.getElementById('compartirWhatsapp').style.display = 'block';
 
   setTimeout(() => {
     descargarComprobante(formato);
@@ -237,21 +233,17 @@ document.getElementById('generar').addEventListener('click', () => {
 
 document.getElementById('verPantallaCompleta').addEventListener('click', () => {
   const contenedor = document.getElementById('captura');
-  if (contenedor.requestFullscreen) {
-    contenedor.requestFullscreen();
-  } else if (contenedor.webkitRequestFullscreen) {
-    contenedor.webkitRequestFullscreen();
-  } else if (contenedor.msRequestFullscreen) {
-    contenedor.msRequestFullscreen();
-  }
+  if (contenedor.requestFullscreen) contenedor.requestFullscreen();
+  else if (contenedor.webkitRequestFullscreen) contenedor.webkitRequestFullscreen();
+  else if (contenedor.msRequestFullscreen) contenedor.msRequestFullscreen();
 });
 
 function generarFecha() {
   const fecha = new Date();
   const opts = { year: 'numeric', month: 'long', day: 'numeric' };
   const f = fecha.toLocaleDateString('es-ES', opts);
-  let h = fecha.getHours(), m = fecha.getMinutes().toString().padStart(2, '0'),
-      ampm = h >= 12 ? 'p. m.' : 'a. m.';
+  let h = fecha.getHours(), m = fecha.getMinutes().toString().padStart(2, '0');
+  let ampm = h >= 12 ? 'p. m.' : 'a. m.';
   h = h % 12 || 12;
   document.getElementById('fecha').innerHTML = `${f}<br>las ${h}:${m} ${ampm}`;
 }
@@ -274,6 +266,22 @@ function descargarComprobante(formato) {
     link.click();
   });
 }
+
+document.getElementById('compartirWhatsapp').addEventListener('click', async () => {
+  const canvas = await html2canvas(document.getElementById('captura'));
+  canvas.toBlob(async blob => {
+    const file = new File([blob], "comprobante.png", { type: "image/png" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        text: "Te envío el comprobante de NequiBotGV.",
+        title: "Comprobante NequiBotGV"
+      });
+    } else {
+      alert("Tu dispositivo no permite compartir esta imagen automáticamente.");
+    }
+  }, 'image/png');
+});
 </script>
 </body>
 </html>
